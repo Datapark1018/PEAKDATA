@@ -77,7 +77,7 @@ body {
 .logo img {
     height: 40px;
     width: auto;
-    background-image: url('/static/images/logo_solo_2.png');
+    background-image: url('/static/images/real_logo2.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;

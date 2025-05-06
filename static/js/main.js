@@ -5,6 +5,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const links = document.querySelectorAll('.nav-links a');
     const logoLink = document.querySelector('.logo a');
 
+    // Footer 링크 클릭 이벤트 처리
+    document.querySelectorAll('.footer-links a').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('준비중입니다.');
+        });
+    });
+
     // 스크롤 이벤트 처리
     window.addEventListener('scroll', function() {
         // 햄버거 메뉴가 열려있으면 헤더 스타일을 변경하지 않음

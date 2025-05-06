@@ -229,8 +229,7 @@
                           name="contact" 
                           method="POST" 
                           data-netlify="true"
-                          data-netlify-honeypot="bot-field"
-                          action="success.html">
+                          data-netlify-honeypot="bot-field">
                         <input type="hidden" name="form-name" value="contact" />
                         <input type="hidden" name="bot-field" />
                         <div class="form-group">
@@ -292,6 +291,14 @@
             <p>© 2025 PEAKDATA. All rights reserved.</p>
         </div>
     </footer>
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <h2>문의가 성공적으로 접수되었습니다</h2>
+            <p>빠른 시일 내에 연락드리도록 하겠습니다.</p>
+            <button class="close-modal">확인</button>
+        </div>
+    </div>
     <script src="./static/js/main.js"></script>
 </body>
 </html> 

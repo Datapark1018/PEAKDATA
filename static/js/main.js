@@ -4,6 +4,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelector('.nav-links');
     const links = document.querySelectorAll('.nav-links a');
     const logoLink = document.querySelector('.logo a');
+    const successModal = document.getElementById('successModal');
+    const closeModal = document.querySelector('.close-modal');
+
+    // 모달 닫기
+    closeModal.addEventListener('click', () => {
+        successModal.classList.remove('active');
+    });
+
+    // 모달 외부 클릭시 닫기
+    successModal.addEventListener('click', (e) => {
+        if (e.target === successModal) {
+            successModal.classList.remove('active');
+        }
+    });
 
     // Footer 링크 클릭 이벤트 처리
     const footerLinks = document.querySelectorAll('.footer-links a, .social-links a');
@@ -87,6 +101,34 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 header.classList.remove('scrolled');
             }
+        });
+    });
+
+    // 폼 제출 처리
+    const form = document.querySelector('.contact-form');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // 폼 데이터 수집
+        const formData = new FormData(form);
+        
+        // Netlify 폼 제출
+        fetch('/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        })
+        .then(() => {
+            // 성공 모달 표시
+            successModal.classList.add('active');
+            // 폼 초기화
+            form.reset();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('문의 접수 중 오류가 발생했습니다. 다시 시도해주세요.');
         });
     });
 });

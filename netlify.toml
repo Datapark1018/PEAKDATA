@@ -2,6 +2,9 @@
   publish = "."
   command = ""
 
+[forms]
+  enabled = true
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

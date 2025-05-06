@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const logoLink = document.querySelector('.logo a');
 
     // Footer 링크 클릭 이벤트 처리
-    document.querySelectorAll('.footer-links a').forEach(link => {
+    const footerLinks = document.querySelectorAll('.footer-links a, .social-links a');
+    footerLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             alert('준비중입니다.');

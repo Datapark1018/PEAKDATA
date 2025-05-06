@@ -105,32 +105,23 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // 폼 제출 처리
-    const form = document.querySelector('.contact-form');
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // 폼 데이터 수집
-        const formData = new FormData(form);
-        
-        // Netlify 폼 제출
-        fetch('/', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-        })
-        .then(() => {
-            // 성공 모달 표시
-            successModal.classList.add('active');
-            // 폼 초기화
-            form.reset();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('문의 접수 중 오류가 발생했습니다. 다시 시도해주세요.');
+    const form = document.querySelector('form[name="contact"]');
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+            fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(formData).toString()
+            })
+            .then(() => {
+                if (successModal) successModal.classList.add('active');
+                form.reset();
+            })
+            .catch(error => alert(error));
         });
-    });
+    }
 });
 
 // Hero section animation on scroll

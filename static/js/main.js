@@ -45,25 +45,30 @@ document.addEventListener('DOMContentLoaded', function() {
     // 모든 앵커 링크 클릭 이벤트 처리
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            // 클릭 즉시 헤더 스타일 변경
-            header.classList.add('scrolled');
-            
             const targetId = this.getAttribute('href');
-            if (targetId === '#') {
+            if (targetId && targetId !== '#') {
+                e.preventDefault();
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const header = document.querySelector('.header');
+                    const headerHeight = header ? header.offsetHeight : 0;
+                    const elementTop = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    window.scrollTo({
+                        top: elementTop - headerHeight,
+                        behavior: 'smooth'
+                    });
+                    // about 애니메이션 리셋은 #about일 때만
+                    if (targetId === '#about') {
+                        setTimeout(() => animateAboutSection(true), 600);
+                    }
+                }
+            } else if (targetId === '#') {
+                e.preventDefault();
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
                 });
-            } else {
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    targetElement.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
             }
-
             // 모바일 메뉴가 열려있으면 닫기
             if (navLinks.classList.contains('active')) {
                 hamburger.classList.remove('active');
@@ -122,6 +127,14 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => alert(error));
         });
     }
+
+    animateAboutSectionAlways();
+    // Repeat about animation on anchor click
+    document.querySelectorAll('a[href="#about"]').forEach(link => {
+        link.addEventListener('click', function() {
+            setTimeout(() => animateAboutSection(true), 400);
+        });
+    });
 });
 
 // Hero section animation on scroll
@@ -130,35 +143,39 @@ function animateHeroElements() {
     if (!heroContent) return;
 
     const h1 = heroContent.querySelector('h1');
-    const p = heroContent.querySelector('p');
+    const ps = heroContent.querySelectorAll('p');
     const button = heroContent.querySelector('.cta-button');
 
-    // 먼저 reset 클래스를 추가하여 초기 상태로 되돌림
-    [h1, p, button].forEach(el => {
-        if (el) {
-            el.classList.remove('animate');
-            el.classList.add('reset');
-        }
+    // reset
+    if (h1) {
+        h1.classList.remove('animate');
+        h1.classList.add('reset');
+    }
+    ps.forEach(p => {
+        p.classList.remove('animate');
+        p.classList.add('reset');
     });
+    if (button) {
+        button.classList.remove('animate');
+        button.classList.add('reset');
+    }
 
-    // 다음 프레임에서 reset 클래스를 제거하고 animate 클래스를 추가
     requestAnimationFrame(() => {
-        [h1, p, button].forEach(el => {
-            if (el) el.classList.remove('reset');
-        });
+        if (h1) h1.classList.remove('reset');
+        ps.forEach(p => p.classList.remove('reset'));
+        if (button) button.classList.remove('reset');
 
-        // 순차적으로 animate 클래스 추가
         setTimeout(() => {
             if (h1) h1.classList.add('animate');
         }, 50);
-
-        setTimeout(() => {
-            if (p) p.classList.add('animate');
-        }, 300);
-
+        ps.forEach((p, idx) => {
+            setTimeout(() => {
+                p.classList.add('animate');
+            }, 300 + idx * 200);
+        });
         setTimeout(() => {
             if (button) button.classList.add('animate');
-        }, 600);
+        }, 300 + ps.length * 200);
     });
 }
 
@@ -244,4 +261,46 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-}); 
+});
+
+// About section animation on scroll
+function animateAboutSection(repeat = false) {
+    const about = document.querySelector('.about');
+    if (!about) return;
+    const targets = [
+        ...about.querySelectorAll('.about-content h3, .about-content p, .achievement-item')
+    ];
+    if (repeat) {
+        targets.forEach(el => {
+            el.classList.remove('visible');
+            void el.offsetWidth; // force reflow for animation reset
+        });
+    }
+    const observer = new window.IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2 });
+    targets.forEach(el => observer.observe(el));
+}
+
+function animateAboutSectionAlways() {
+    const about = document.querySelector('.about');
+    if (!about) return;
+    const targets = [
+        ...about.querySelectorAll('.about-content h3, .about-content p, .achievement-item')
+    ];
+    const observer = new window.IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            } else {
+                entry.target.classList.remove('visible');
+            }
+        });
+    }, { threshold: 0.2 });
+    targets.forEach(el => observer.observe(el));
+} 

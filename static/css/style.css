@@ -234,6 +234,7 @@ body {
 }
 
 .hero-content .cta-button {
+    margin-top: 3.5rem;
     animation: fadeInUp 1s ease-out 0.6s forwards;
     opacity: 0;
 }
@@ -365,6 +366,11 @@ body {
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+
+.feature-item:hover {
+    transform: translateY(-10px);
 }
 
 .feature-item i {
@@ -698,7 +704,7 @@ body {
 
 .about-container {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     gap: 4rem;
     width: 100%;
     margin: 0 auto;
@@ -733,7 +739,12 @@ body {
     background-color: var(--white);
     padding: 2rem;
     border-radius: 10px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 16px rgba(44,62,80,0.08), 0 1.5px 4px rgba(44,62,80,0.04);
+    transition: box-shadow 0.3s;
+}
+
+.achievement-item:hover {
+    box-shadow: 0 8px 32px rgba(44,62,80,0.16), 0 3px 8px rgba(44,62,80,0.08);
 }
 
 .achievement-item i {
@@ -766,11 +777,18 @@ body {
 }
 
 .about-image {
-    flex: 1;
+    width: 360px;
+    min-height: 420px;
+    height: auto;
+    flex: none;
+    display: flex;
 }
 
 .about-image img {
     width: 100%;
+    height: 100%;
+    min-height: 420px;
+    object-fit: cover;
     border-radius: 10px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
@@ -779,18 +797,29 @@ body {
     .about-container {
         flex-direction: column;
     }
-
     .achievements {
         flex-direction: column;
+        gap: 1.5rem;
     }
-
+    .service-cards,
+    .feature-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 0;
+        margin: 0;
+    }
     .about-image {
         order: -1;
-        margin-bottom: 2rem;
+        width: 100%;
+        min-height: unset;
+        height: auto;
     }
-
-    section h2 {
-        font-size: 2rem;
+    .about-image img {
+        width: 100%;
+        height: auto;
+        min-height: unset;
+        object-fit: cover;
     }
 }
 
@@ -1128,4 +1157,39 @@ a:hover {
 
 .close-modal:hover {
     background-color: #34495e;
+}
+
+.contact-form label i {
+    margin-right: 0.5em;
+    vertical-align: middle;
+}
+
+/* About Section Animation */
+.about .about-content h3,
+.about .about-content p,
+.about .achievement-item {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+
+.about .about-content h3.visible,
+.about .about-content p.visible,
+.about .achievement-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Optional: subtle background for about section */
+.about {
+    background: linear-gradient(135deg, #f5f6fa 60%, #eaf1fb 100%);
+}
+
+/* Card shadow and hover for achievement items */
+.achievement-item {
+    box-shadow: 0 4px 16px rgba(44,62,80,0.08), 0 1.5px 4px rgba(44,62,80,0.04);
+    transition: box-shadow 0.3s;
+}
+.achievement-item:hover {
+    box-shadow: 0 8px 32px rgba(44,62,80,0.16), 0 3px 8px rgba(44,62,80,0.08);
 } 
